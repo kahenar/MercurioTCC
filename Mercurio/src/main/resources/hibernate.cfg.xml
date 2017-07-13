@@ -30,7 +30,7 @@
 		<property name="show_sql">true</property>
 
 		<!-- Cria as tabelas do banco de dados - create/validate/update -->
-		<property name="hbm2ddl.auto">create</property>
+		<property name="hbm2ddl.auto">update</property>
 
 		<!-- Mapeamento das entidades -->
 		<mapping class="br.com.mercurio.entrega.domain.Estado" />

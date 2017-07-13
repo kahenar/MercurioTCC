@@ -25,6 +25,13 @@
 		<url-pattern>*.xhtml</url-pattern>
 	</servlet-mapping>
 
+
+	<!-- Definição do Mecanismo de Upload -->
+	<context-param>
+		<param-name>primefaces.UPLOADER</param-name>
+		<param-value>native</param-value>
+	</context-param>
+
 	<!-- Carregamento do Hibernate -->
 	<listener>
 		<listener-class>br.com.mercurio.entregas.util.HibernateContexto</listener-class>
