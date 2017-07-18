@@ -15,7 +15,7 @@
 			<p:panel header="Cidades - Listagem">
 				<p:dataTable id="tabela" emptyMessage="Nenhum registro encontrado."
 					paginator="true" value="#{cidadeBean.cidades}" var="cidade"
-					rows="5">
+					rows="10">
 					<f:facet name="header">
 						<p:commandButton value="Novo" actionListener="#{cidadeBean.novo}"
 							oncomplete="PF('dialogo').show();"

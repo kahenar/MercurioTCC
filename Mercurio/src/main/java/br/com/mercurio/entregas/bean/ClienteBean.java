@@ -65,7 +65,7 @@ public class ClienteBean implements Serializable {
 
 	public void editar(ActionEvent evento){
 		try {
-			cliente = (Cliente) evento.getComponent().getAttributes().get("clienteSelecionada");
+			cliente = (Cliente) evento.getComponent().getAttributes().get("clienteSelecionado");
 			PessoaDAO pessoaDAO = new PessoaDAO();
 			pessoas = pessoaDAO.listar("nome");
 		} catch (RuntimeException erro) {
@@ -102,14 +102,16 @@ public class ClienteBean implements Serializable {
 
 	public void excluir(ActionEvent evento) {
 		try {
-			cliente = (Cliente) evento.getComponent().getAttributes().get("clienteSelecionada");
-			ClienteDAO clienteDAO = new ClienteDAO();
-			clienteDAO.excluir(cliente);
+			cliente = (Cliente) evento.getComponent().getAttributes().get("clienteSelecionado");
+			ClienteDAO clienteDAO = new ClienteDAO();		
+			clienteDAO.excluir(cliente);			
 			clientes = clienteDAO.listar();
 			Messages.addGlobalInfo("Cliente removido com sucesso");
 		} catch (RuntimeException erro) {
 			Messages.addFlashGlobalError("Ocorreu um erro ao tentar remover o cliente");
+			//System.out.print(erro.getMessage());
 			erro.printStackTrace();
+			
 
 		}
 

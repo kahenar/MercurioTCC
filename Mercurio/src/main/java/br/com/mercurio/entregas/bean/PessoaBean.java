@@ -129,14 +129,14 @@ public class PessoaBean implements Serializable {
 			pessoa = (Pessoa) evento.getComponent().getAttributes().get("pessoaSelecionada");
 			PessoaDAO pessoaDAO = new PessoaDAO();
 			pessoaDAO.excluir(pessoa);
-			pessoas = pessoaDAO.listar();
+			pessoas = pessoaDAO.listar();			
 			Messages.addGlobalInfo("Pessoa removido com sucesso");
 		} catch (RuntimeException erro) {
 			Messages.addFlashGlobalError("Ocorreu um erro ao tentar remover o pessoa");
 			erro.printStackTrace();
 
 		}
-
+		
 	}
 	
 	public void popular() {
