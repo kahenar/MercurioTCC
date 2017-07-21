@@ -9,6 +9,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+
 @SuppressWarnings("serial")
 @Entity
 
@@ -26,12 +27,12 @@ public class Funcionario extends GenericDomain {
 	@OneToOne
 	@JoinColumn(nullable = false)
 	private Pessoa pessoa;
-
 	
-	public String getCargo() {
+	public String getCargo () {
 		return cargo;
 	}
-	
+
+		
 	public void setCargo(String cargo) {
 		this.cargo = cargo;
 	}

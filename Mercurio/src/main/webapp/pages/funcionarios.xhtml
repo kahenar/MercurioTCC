@@ -82,7 +82,8 @@
 		draggable="false" resizable="false" modal="true" closable="false">
 		<h:form id="formCadastro">
 		<h:panelGrid id="painel" columns="2">
-		
+								
+						
 		<p:outputLabel for="pessoa" value="Pessoa:" />
 					<p:selectOneMenu id="pessoa" filter="true"
 						value="#{funcionarioBean.funcionario.pessoa}" required="true"
@@ -93,11 +94,21 @@
 						<f:selectItems value="#{funcionarioBean.pessoas}" var="pessoa"
 							itemValue="#{pessoa}" itemLabel="#{pessoa.nome} - #{pessoa.cpf}" />
 					</p:selectOneMenu>
+										
 					
 					<p:outputLabel for="carteiraTrabalho" value="Carteira de Trabalho" />
-					<p:inputMask id="carteiraTrabalho" mask="9999999-00000" size="10"
+					<p:inputMask id="carteiraTrabalho" mask="9999999-999999" size="10"
 						value="#{funcionarioBean.funcionario.carteiraTrabalho}" required="true"
 						requiredMessage="O campo 'Carteira de Trabalho' é obrigatório" />
+						
+				<p:outputLabel for="cargo" value="Cargo:" />
+					<p:selectOneMenu id="cargo"
+						value="#{funcionarioBean.funcionario.cargo}" required="true"
+						requiredMessage="O campo 'Cargo' é obrigatório">
+						<f:selectItem itemValue="Administrador" itemLabel="Administrador" />
+						<f:selectItem itemValue="TI" itemLabel="TI" />
+						<f:selectItem itemValue="Assistente" itemLabel="Assistente" />						
+					</p:selectOneMenu>
 						
 						<p:outputLabel for="dataAdmissao" value="Data de Admissão:" />
 				<p:calendar id="dataAdmissao"

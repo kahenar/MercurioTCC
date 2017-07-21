@@ -90,9 +90,9 @@ public class FuncionarioBean implements Serializable {
 			FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
 			funcionarioDAO.excluir(funcionario);
 			funcionarios = funcionarioDAO.listar();
-			Messages.addGlobalInfo("Funcionario removido com sucesso");
+			Messages.addGlobalInfo("Funcionário removido com sucesso");
 		} catch (RuntimeException erro) {
-			Messages.addFlashGlobalError("Ocorreu um erro ao tentar remover o Funcionario");
+			Messages.addFlashGlobalError("Ocorreu um erro ao tentar remover o Funcionário");
 			erro.printStackTrace();
 
 		}
