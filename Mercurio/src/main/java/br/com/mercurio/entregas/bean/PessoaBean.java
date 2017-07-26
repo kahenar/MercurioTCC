@@ -1,19 +1,19 @@
 package br.com.mercurio.entregas.bean;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import org.omnifaces.util.Messages;
-import br.com.mercurio.entregas.dao.CidadeDAO;
-import br.com.mercurio.entregas.dao.EstadoDAO;
 import br.com.mercurio.entregas.dao.PessoaDAO;
-import br.com.mercurio.entrega.domain.Cidade;
-import br.com.mercurio.entrega.domain.Estado;
+import br.com.mercurio.entrega.domain.CEP;
 import br.com.mercurio.entrega.domain.Pessoa;
+import com.google.gson.Gson;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
 
 
 
@@ -25,9 +25,6 @@ public class PessoaBean implements Serializable {
 
 	private Pessoa pessoa;
 	private List<Pessoa> pessoas;
-	private Estado estado;
-	private List<Estado> estados;
-	private List<Cidade> cidades;
 
 
 	public Pessoa getPessoa() {
@@ -46,29 +43,31 @@ public class PessoaBean implements Serializable {
 		this.pessoas = pessoas;
 	}
 
-	public Estado getEstado() {
-		return estado;
-	}
+	public void buscarCEP() {
+		try {
+			Client cliente = ClientBuilder.newClient();
+			WebTarget caminho = cliente
+					.target("http://viacep.com.br/ws/" + pessoa.getCep().replace(".", "").replace("-", "") + "/json/");
+			String json = caminho.request().get(String.class);
 
-	public void setEstado(Estado estado) {
-		this.estado = estado;
-	}
+			Gson gson = new Gson();
+			CEP cep = gson.fromJson(json, CEP.class);
 
-	public List<Estado> getEstados() {
-		return estados;
+			if (cep.getErro() == null) {
+				pessoa.setBairro(cep.getBairro());
+				pessoa.setRua(cep.getLogradouro());
+				pessoa.setUf(cep.getUf());
+			} else {
+				Messages.addGlobalError("CEP invÃ¡lido");
+			}
+		} catch (RuntimeException erro) {
+			Messages.addGlobalError("Ocorreu um erro ao tentar obter os dados do CEP");
+			erro.printStackTrace();
+		}
 	}
-
-	public void setEstados(List<Estado> estados) {
-		this.estados = estados;
-	}
-
-	public List<Cidade> getCidades() {
-		return cidades;
-	}
-
-	public void setCidades(List<Cidade> cidades) {
-		this.cidades = cidades;
-	}
+	
+	
+	
 
 	@PostConstruct
 	public void listar() {
@@ -84,40 +83,27 @@ public class PessoaBean implements Serializable {
 	public void novo() {
 		try {
 			pessoa = new Pessoa();
-			estado = new Estado();
-			EstadoDAO estadoDAO = new EstadoDAO();
-			estados = estadoDAO.listar("nome");	
-			cidades = new ArrayList<>();
 		} catch (RuntimeException erro) {
 			Messages.addGlobalError("Ocorreu um erro ao tentar gerar uma nova pessoa");
 			erro.printStackTrace();
 		}
+
 	}
-		
-		
+
 	public void editar(ActionEvent evento) {
-		try{
+		try {
 			pessoa = (Pessoa) evento.getComponent().getAttributes().get("pessoaSelecionada");
-			estado = pessoa.getCidade().getEstado();
-			EstadoDAO estadoDAO = new EstadoDAO();
-			estados = estadoDAO.listar("nome");
-			CidadeDAO cidadeDAO = new CidadeDAO();
-			cidades = cidadeDAO.buscarPorEstado(estado.getCodigo());
-		}catch(RuntimeException erro){
+		} catch (RuntimeException erro) {
 			Messages.addGlobalError("Ocorreu um erro ao tentar selecionar uma pessoa");
 		}
 	}
-	
+
 	public void salvar() {
 		try {
 			PessoaDAO pessoaDAO = new PessoaDAO();
-			pessoaDAO.merge(pessoa);	
-			pessoas = pessoaDAO.listar("nome");	
-			pessoa = new Pessoa();	
-			estado = new Estado();
-			EstadoDAO estadoDAO = new EstadoDAO();
-			estados = estadoDAO.listar("nome");
-			cidades = new ArrayList<>();
+			pessoaDAO.merge(pessoa);
+			pessoas = pessoaDAO.listar("nome");
+			pessoa = new Pessoa();
 		} catch (RuntimeException erro) {
 			Messages.addGlobalError("Ocorreu um erro ao tentar salvar a pessoa");
 			erro.printStackTrace();
@@ -129,30 +115,16 @@ public class PessoaBean implements Serializable {
 			pessoa = (Pessoa) evento.getComponent().getAttributes().get("pessoaSelecionada");
 			PessoaDAO pessoaDAO = new PessoaDAO();
 			pessoaDAO.excluir(pessoa);
-			pessoas = pessoaDAO.listar();			
+			pessoas = pessoaDAO.listar();
 			Messages.addGlobalInfo("Pessoa removido com sucesso");
 		} catch (RuntimeException erro) {
 			Messages.addFlashGlobalError("Ocorreu um erro ao tentar remover o pessoa");
 			erro.printStackTrace();
 
 		}
-		
+
 	}
+
 	
-	public void popular() {
-		try {
-			if (estado != null) {
-				CidadeDAO cidadeDAO = new CidadeDAO();
-				cidades = cidadeDAO.buscarPorEstado(estado.getCodigo());
-			} else {
-				cidades = new ArrayList<>();
-			}
-		} catch (RuntimeException erro) {
-			Messages.addGlobalError("Ocorreu um erro ao tentar filtrar as cidades");
-			erro.printStackTrace();
-
-		}
-
-	}
 
 }

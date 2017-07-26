@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 @Entity
 
 public class Pessoa extends GenericDomain  {
+	
+		
 	@Column(length = 50, nullable = false)
 	private String nome;
 
@@ -20,9 +22,12 @@ public class Pessoa extends GenericDomain  {
 	@Column(length = 12, nullable = false)
 	private String rg;
 
+	@Column(length = 2, nullable = false)
+	private String sexo;
+
 	@Column(length = 100, nullable = false)
 	private String rua;
-
+		
 	@Column(nullable = false)
 	private Short numero;
 
@@ -43,13 +48,11 @@ public class Pessoa extends GenericDomain  {
 	@Column(length = 14, nullable = false)
 	private String celular;
 
-
 	@Column(length = 100, nullable = false)
 	private String email;
 
-	@ManyToOne
-	@JoinColumn(nullable = false)
-	private Cidade cidade;
+	@Column (length = 2, nullable = false)
+	private String uf;
 	
 	public String getNome() {
 		return nome;
@@ -73,6 +76,14 @@ public class Pessoa extends GenericDomain  {
 
 	public void setRg(String rg) {
 		this.rg = rg;
+	}
+
+	public String getSexo() {
+		return sexo;
+	}
+
+	public void setSexo(String sexo) {
+		this.sexo = sexo;
 	}
 
 	public String getRua() {
@@ -139,12 +150,17 @@ public class Pessoa extends GenericDomain  {
 		this.email = email;
 	}
 
-	
-	public Cidade getCidade() {
-		return cidade;
+	public String getUf() {
+		return uf;
 	}
 
-	public void setCidade(Cidade cidade) {
-		this.cidade = cidade;
+	public void setUf(String uf) {
+		this.uf = uf;
 	}
+
+	
+	
+	
+
+	
 }
